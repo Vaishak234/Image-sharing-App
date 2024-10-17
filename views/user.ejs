@@ -1,0 +1,44 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js" integrity="sha512-luMnTJZ7oEchNDZAtQhgjomP1eZefnl82ruTH/3Oj/Yu5qYtwL7+dVRccACS/Snp1lFXq188XFipHKYE75IaQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<div class="inputBox m-5">
+   <input type="text" id="username" placeholder="enter your name"> <button id="changeName">change name</button>
+</div>
+
+<div class="inputBox m-5">
+   <input type="text" id="msgInp" > <button id="sendBtn">send</button>
+</div>
+
+<div id="msgBox">
+   <p>message</p>
+</div>
+
+<script>
+
+  const socket = io.connect("http://localhost:3000")
+
+  const username = document.getElementById("username")
+  const changeName = document.getElementById("changeName")
+
+  const msgInp = document.getElementById("msgInp")
+
+  const msgBox = document.getElementById("msgBox")
+  const sendBtn = document.getElementById("sendBtn")
+
+  sendBtn.onclick = function(){
+   console.log("hyy");
+   
+    socket.emit("new_message",{message:msgInp.value})
+  }
+
+  socket.on("new_message",(data)=>{
+     msgInp.value=""
+     msgBox.innerText = ""
+
+     msgBox.innerHTML = `<p>${data.username }, ${data.message}</p>`
+  })
+  
+
+
+</script>

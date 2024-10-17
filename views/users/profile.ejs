@@ -1,0 +1,303 @@
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-4  d-flex flex-column align-items-center m-4">
+
+
+ <div class="profile__imgBox ">
+    <label class="profilePic" for="profilePicInp">
+    <img  src="<%= user.profileImg ? 'http://localhost:3000/static/profile-uploads/' + user.profileImg : '/static/assets/blankProfile.webp' %>"  alt="" class="profileImg">
+       <div class="iconBox">
+         <i class="fa-solid fa-plus"></i>
+       </div>
+      <input name="profilePic" type="file" hidden id="profilePicInp">
+           </label>
+       <h3 class="text-primary text-center"><%=user.username%></h3> 
+      
+ </div>
+
+ <% posts.forEach((post)=>{ %>
+
+    <div class="post-card">
+        <div class="post-header">
+           
+               <img  src="<%= user.profileImg ? 'http://localhost:3000/static/profile-uploads/' + user.profileImg : '/static/assets/blankProfile.webp' %>"  alt="" class="profile-pic">
+             
+            <span class="username"><%=post.userId.username%></span>
+
+             <div class="dropdown">
+        <span class="dots" id="dots">&#8230;</span>
+        <input hidden type="text" name="" id="inpPostId" value="<%=post._id%>">
+        <div class="popup" id="popup-<%=post._id%>">
+            <a href="/api/posts/edit-post/<%=post._id%>" id="edit-link">Edit</a>
+            <a href="/api/posts/delete-post/<%=post._id%>" id="delete-link" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
+        </div>
+    </div>
+    
+        </div>
+        <img class="post-image" src="http://localhost:3000/static/uploads/<%=post.file%>" alt="Post Image">
+        <div class="post-footer">
+           
+            <div class="caption">
+                <strong><%=post.userId.username%></strong> <%=post.title%>
+            </div>
+           
+              
+            
+        </div>
+    </div>
+ 
+ 
+  <% }) %>
+
+</div>
+
+
+
+
+   
+
+
+<style>
+
+.profile__imgBox{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.profile__imgBox .profileImg{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.profile__imgBox .profilePic{
+    position: relative;
+
+}
+.profilePic .iconBox{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    padding: 0px 4px;
+    color: blue;
+}
+
+  .dropdown {
+            position: absolute;
+            right: 10px;
+            display: inline-block;
+        }
+
+        .dots {
+            cursor: pointer;
+            font-size: 30px;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            left: 0;
+            z-index: 4;
+            top: 100%;
+            background-color: rgb(255, 223, 223);
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 10px;
+            min-width: 150px;
+        }
+
+        .popup a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .popup a:hover {
+            background-color: #f0f0f0;
+        }
+
+
+.post-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    margin: 20px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px;
+    position: relative;
+}
+
+.profile-pic {
+  width: 30px;
+  height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+     max-height: 300px;
+     border-radius: 8px;
+}
+
+.post-footer {
+    padding: 10px;
+}
+
+.post-actions {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.likes, .caption {
+    margin-top: 5px;
+}
+
+.caption {
+    color: #555;
+}
+
+.comment-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.comment-input {
+    flex: 1;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.comment-button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.comment-button:hover {
+    background-color: #007bbf;
+}
+
+</style>
+
+<!-- <script>
+    const postId = document.getElementById("inpPostId").value
+    console.log(postId);
+    
+        const dots = document.getElementById('dots');
+      
+        let popup ;
+        // Toggle the popup visibility
+        dots.addEventListener('click', function() {
+             popup =document.getElementById(`popup-${postId}`)
+            console.log(popup );
+            
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+            }
+        });
+
+        // Close the popup if clicked outside
+        window.addEventListener('click', function(event) {
+           popup =document.getElementById(`popup-${postId}`)
+            if (!dots.contains(event.target) && !popup.contains(event.target)) {
+                popup.style.display = 'none';
+            }
+        });
+
+    
+</script> -->
+
+<script>
+
+      // Add event listener to the parent container
+    document.querySelector('.row').addEventListener('click', function(event) {
+        const dots = event.target.closest('.dots');
+        
+        if (dots) {
+            const postDiv = dots.closest('.post-card');
+            const popup = postDiv.querySelector('.popup');
+
+            // Toggle the popup visibility
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+            } else {
+                // Hide all other popups
+                document.querySelectorAll('.popup').forEach(p => {
+                    p.style.display = 'none';
+                });
+                popup.style.display = 'block';
+            }
+        } else {
+            // Close the popup if clicking outside
+            document.querySelectorAll('.popup').forEach(p => {
+                p.style.display = 'none';
+            });
+        }
+    });
+
+
+    // upload profile pic 
+    document.getElementById('profilePicInp').addEventListener('change', async (event) => {
+    const file = event.target.files[0]; // Get the selected file
+
+    if (!file) {
+      
+        return;
+    }
+    console.log(file);
+    
+    const formData = new FormData();
+    formData.append('profilePic', file); // Add the image file to the FormData
+
+    try {
+        const response = await fetch('/api/user/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+        
+            console.log(result);
+            location.reload()
+        } else {
+            throw new Error('Upload failed');
+        }
+    } catch (error) {
+       console.log(error);
+       
+    }
+});
+</script>

@@ -1,0 +1,22 @@
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4  d-flex flex-column align-items-center m-4">
+
+    <h2>Edit User Profile</h2>
+
+<div class="container mt-4">
+    <form action="/api/admin/edit/<%= user._id %>" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
+        </div>
+        <div class="form-group mb-4">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+        <a href="/api/admin/dashboard" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+</div>

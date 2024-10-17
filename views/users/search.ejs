@@ -1,0 +1,66 @@
+<div class="row row-cols-1 row-cols-md-3 g-4  d-flex flex-column align-items-center m-4">
+
+
+ <div class="card search-container d-flex py-4 px-3">
+      <div class="search_card">
+         <h1>Search</h1>
+           <div>
+            <input id="qureyInp" oninput="getSearchResult()" type="text" name="q" style="width: 90%;"  placeholder="Search..." required>
+            <button >
+                <i class="fas fa-paper-plane"></i>
+             </button>
+           </div>
+        </div>
+      </div>
+
+       <div id="searchContainer" class="container">
+    
+       
+       </div>
+</div>
+
+
+<script>
+ 
+   async function getSearchResult(){
+    
+     try {
+         const q = document.getElementById('qureyInp').value
+         const searchContainer = document.getElementById('searchContainer')
+         const params = new URLSearchParams({q:q}).toString();
+    
+          searchContainer.innerHTML = ""
+        // Combine with your API endpoint
+         const apiUrl = `/api/user/search/name/?${params}`;
+       
+         const res = await fetch(apiUrl)
+         if (!res.ok) {
+            throw new Error('Network response was not ok');
+         }
+         const data = await res.json();
+
+         if(data.length == 0){
+            searchContainer.innerHTML = "<p class='text-center'>no user found</p>"
+         }
+         data.forEach(user => {
+            searchContainer.innerHTML += `
+             <ul class="user-list">
+        
+                    <li class="w-100 card p-2 d-flex gap-2">
+                         <img style="border-radius: 50%;" src="${user.profileImg ? 'http://localhost:3000/static/profile-uploads/' + user.profileImg : '/static/assets/blankProfile.webp' }" alt="avatar" width="40" height="40" />
+                        <span class="username">${user.username}</span>
+                    </li>
+              </ul>
+            `
+         });
+
+     } catch (error) {
+        console.log(error);
+        
+     }
+
+   }
+
+  
+
+</script>

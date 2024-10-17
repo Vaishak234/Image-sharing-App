@@ -1,0 +1,145 @@
+
+    
+
+<div class="row row-cols-1 row-cols-md-3 g-4  d-flex flex-column align-items-center m-4">
+
+
+    <div class="popup" id="addPostPopup" >
+        <div class="popup-content">
+            <!-- <span class="close-button" onclick="closePopup()">&times;</span> -->
+            <h2>Edit Post</h2>
+            <img class="postImg" src="http://localhost:3000/static/uploads/<%=post.file%>" alt="">
+            <form id="addPostForm" method="POST" >
+                <textarea id="caption" value="" name="title" placeholder="Write a caption..." required><%=post?.title%></textarea>
+                <button type="submit" class="submit-button">Share</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+</div>
+
+<style>
+
+
+
+.popup {
+    display: flex; /* Hidden by default */
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.popup-content {
+    background: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.popup-content .postImg{
+  width: 100%;
+  margin-bottom: 10px;
+  height: 300px;
+}
+.close-button {
+    cursor: pointer;
+    float: right;
+    font-size: 24px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    width: 100%;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    padding: 10px;
+    height: 80px;
+    resize: none;
+}
+
+.submit-button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #007bbf;
+}
+
+.open-popup-button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.open-popup-button:hover {
+    background-color: #007bbf;
+}
+</style>
+    
+    
+    <!-- <div
+      class="container d-flex justify-content-center"
+      style="margin-top: 8vh ;"
+    >
+      <div
+        class="rounded-4 p-5"
+        style="width:700px ;  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;"
+      >
+        <form method="POST">
+          <div class="form-group mb-4">
+            <h2 class="text-primary text-center">Add Post</h2>
+          </div>
+        
+           <div class="card">
+       <img src="http://localhost:3000/static/uploads/<%=post.file%>" class="card-img-top"
+        alt="Hollywood Sign on The Hill" />
+    </div>
+         
+
+          <div class="form-group mb-4">
+            <label for="exampleInputpost">title</label>
+            <input
+              type="text"
+              name="title"
+              class="form-control"
+              id="exampleInputpost"
+              value="<%=post.title%>"
+            />
+          </div>
+         
+
+          <div class="d-grid gap-2 my-4">
+            <button type="submit" class="btn btn-primary">edit</button>
+          </div>
+
+         
+        </form>
+      </div>
+    </div> -->
+
+
+    

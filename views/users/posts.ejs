@@ -1,0 +1,242 @@
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4 d-flex flex-column align-items-center m-4">
+    <% allPosts.forEach((post,i) => { %>
+   <div class="post-card" data-post-id="<%= post._id %>">
+            <div class="post-header">
+                <img class="profile-pic" src="<%= post.userId.profileImg ? 'http://localhost:3000/static/profile-uploads/' + post.userId.profileImg : '/static/assets/blankProfile.webp' %>" alt="Profile Picture">
+                <span class="username"><%= post.userId.username %></span>
+            </div>
+            <img class="post-image" src="http://localhost:3000/static/uploads/<%= post.file %>" alt="Post Image">
+            <div class="post-footer">
+                <div class="post-actions">
+                     <button onclick="likePost('<%= post._id %>')" class="action-button">
+                        <% if (post.likes.some(like => like._id.toString() === userId.toString())) { %>
+         <span class="beforeLiked" style="display: none;">
+            <i class="fa-regular fa-heart"></i>
+        </span>
+        <span class="afterLiked" style="display: block;">
+            <i class="fa-solid fa-heart" style="color: red;"></i>
+        </span>
+    <% } else { %>
+        <span class="beforeLiked" style="display: block;">
+            <i class="fa-regular fa-heart"></i>
+        </span>
+        <span class="afterLiked" style="display: none;">
+            <i class="fa-solid fa-heart" style="color: red;"></i>
+        </span>
+    <% } %>
+                </button>
+                    <button onclick="toggleCommentBtn('<%=post._id%>')" class="action-button"><i class="fa-regular fa-comment"></i></button>
+                    <button class="action-button"><i class="fa-solid fa-share"></i></button>
+                </div>
+             
+                <div class="likes">
+                   <span> <strong id="likesCount"><%=allPosts[i].likes.length%> </strong>  Likes </span> 
+                </div>
+                <div class="caption">
+                    <strong><%= post.userId.username %></strong> <%= post.title %>
+                </div>
+                
+                  <div id="commentBox" style="display: none;" class="card my-4" data-post-id="<%=post._id%>">
+                     
+                  </div>
+
+                <form action="/api/posts/comment/<%= post._id %>" class="comment-section" method="POST">
+                    <input type="text" name="comment" class="comment-input" placeholder="Add a comment...">
+                    <button class="comment-button">Send</button>     
+                </form>
+            </div>
+        </div>
+    <% }) %>
+    
+</div>
+
+
+<style>
+
+
+
+
+.post-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.profile-pic {
+  width: 30px;
+  height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+     max-height: 300px;
+     border-radius: 8px;
+}
+
+.post-footer {
+    padding: 10px;
+}
+
+.post-actions {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.likes, .caption {
+    margin-top: 5px;
+}
+
+.caption {
+    color: #555;
+}
+
+.comment-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+#afterLiked{
+    color: red;
+    display: none;
+}
+
+#commentBox{
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.comment-input {
+    flex: 1;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.comment-button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.comment-button:hover {
+    background-color: #007bbf;
+}
+
+</style>
+
+<script >
+  
+
+async function toggleCommentBtn(postId) {
+    const commentContainer = document.querySelector(`.card[data-post-id="${postId}"]`);
+    if(commentContainer.style.display == "none"){
+        commentContainer.style.display = "block"
+        await getComments(postId)
+    }else{
+        commentContainer.style.display = "none"
+    }
+}
+
+
+
+async function getComments(postId) {
+    
+    try {
+      
+        const commentContainer = document.querySelector(`.card[data-post-id="${postId}"]`);
+    
+        const response = await fetch(`/api/posts/${postId}/comments`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+       
+        console.log(data);
+        commentContainer.innerHTML = ""
+        if(data.length == 0){
+             commentContainer.innerHTML = '<strong  style="margin-left:125px" class="mt-2 "> no comments yet</strong>'
+        }
+       
+       else { data.forEach(comment => {
+            commentContainer.innerHTML += `
+              <div class="card-body">
+                 <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                      <img style="border-radius: 50%;" src="${comment.userId.profileImg ? 'http://localhost:3000/static/profile-uploads/' + comment.userId.profileImg : '/static/assets/blankProfile.webp' }" alt="avatar" width="40" height="40" />
+                      <strong class=" mb-0 ms-2">${comment.userId.username}</strong>
+                    </div>
+               </div>
+               <span class="mx-5">${comment.comment}</span>
+            </div>
+            `
+        });
+        }
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+    }
+}
+      
+
+   async function likePost(postId) {
+    const postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
+    const beforeLiked = postCard.querySelector('.beforeLiked');
+    const afterLiked = postCard.querySelector('.afterLiked');
+    const likesCount = postCard.querySelector("#likesCount");
+
+    let response = await fetch(`/api/user/post/like/${postId}`);
+    const data = await response.json();
+
+
+    if (data.status !== true) {
+        // Liked
+        afterLiked.style.display = "none";
+        beforeLiked.style.display = "block";
+        let currentLikes = parseInt(likesCount.textContent);
+        likesCount.textContent = Math.max(currentLikes - 1, 0); // Decrease likes, not below 0
+    } else {
+        // Unliked
+        beforeLiked.style.display = "none";
+        afterLiked.style.display = "block";
+        let currentLikes = parseInt(likesCount.textContent);
+        likesCount.textContent = Math.max(currentLikes + 1, 0); // Increase likes
+    }
+}
+
+
+
+</script>
+
+
